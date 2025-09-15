@@ -1,0 +1,1 @@
+# Hack_U_KANAZAWA_2025
