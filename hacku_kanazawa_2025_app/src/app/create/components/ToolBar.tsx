@@ -8,8 +8,10 @@ import {
   DefaultTextAlignStyle,
   DefaultToolbar,
   Editor,
+  EnumStyleProp,
   GeoShapeGeoStyle,
   HandToolbarItem,
+  ReadonlySharedStyleMap,
   SelectTool,
   Tldraw,
   useRelevantStyles,
@@ -17,7 +19,13 @@ import {
   useTranslation,
   useValue,
 } from "tldraw";
-import { Pencil, PencilIcon } from "lucide-react";
+import {
+  Pencil,
+  PencilIcon,
+  TextAlignCenter,
+  TextAlignEnd,
+  TextAlignStart,
+} from "lucide-react";
 import "tldraw/tldraw.css";
 // There's a guide at the bottom of this file!
 
@@ -63,13 +71,110 @@ export const ExternalToolbar = ({
       >
         Oval
       </button>
-      <AlignTools editor={editor} />
+      <AlignTools editor={editor} styles={styles} />
     </div>
   );
 };
 
-function TextTools() {}
+const FontTools = ({
+  editor,
+  styles,
+}: {
+  editor?: any;
+  styles?: ReadonlySharedStyleMap | null;
+}) => {
+  if (styles === undefined) return null;
 
+  return (
+    <div className="flex gap-1">
+      <button
+        className="external-button"
+        data-isactive={
+          // SharedStyle オブジェクトを取得
+          (() => {
+            const sharedStyle = styles?.get(DefaultTextAlignStyle);
+            // sharedStyle が undefined でなく、かつ type が "shared" で value が "start" の場合のみ "true"
+            return sharedStyle?.type === "shared" &&
+              sharedStyle.value === "start"
+              ? "true"
+              : "false";
+          })()
+        }
+        data-can-click={
+          styles && Array.from(styles.keys()).includes(DefaultTextAlignStyle)
+            ? "true"
+            : "false"
+        }
+        onClick={() => {
+          editor.run(() => {
+            editor.setStyleForNextShapes(DefaultTextAlignStyle, "start");
+            editor.setStyleForSelectedShapes(DefaultTextAlignStyle, "start");
+            // editor.setCurrentTool("textAlign");
+          });
+        }}
+      >
+        <TextAlignStart />
+      </button>
+
+      <button
+        className="external-button"
+        data-isactive={
+          // SharedStyle オブジェクトを取得
+          (() => {
+            const sharedStyle = styles?.get(DefaultTextAlignStyle);
+            // sharedStyle が undefined でなく、かつ type が "shared" で value が "start" の場合のみ "true"
+            return sharedStyle?.type === "shared" &&
+              sharedStyle.value === "middle"
+              ? "true"
+              : "false";
+          })()
+        }
+        data-can-click={
+          styles && Array.from(styles.keys()).includes(DefaultTextAlignStyle)
+            ? "true"
+            : "false"
+        }
+        onClick={() => {
+          editor.run(() => {
+            editor.setStyleForNextShapes(DefaultTextAlignStyle, "middle");
+            editor.setStyleForSelectedShapes(DefaultTextAlignStyle, "middle");
+            // editor.setCurrentTool("textAlign");
+          });
+        }}
+      >
+        <TextAlignCenter />
+      </button>
+
+      <button
+        className="external-button"
+        data-isactive={
+          // SharedStyle オブジェクトを取得
+          (() => {
+            const sharedStyle = styles?.get(DefaultTextAlignStyle);
+            // sharedStyle が undefined でなく、かつ type が "shared" で value が "start" の場合のみ "true"
+            return sharedStyle?.type === "shared" && sharedStyle.value === "end"
+              ? "true"
+              : "false";
+          })()
+        }
+        data-can-click={
+          styles && Array.from(styles.keys()).includes(DefaultTextAlignStyle)
+            ? "true"
+            : "false"
+        }
+        onClick={() => {
+          editor.run(() => {
+            editor.setStyleForNextShapes(DefaultTextAlignStyle, "end");
+            editor.setStyleForSelectedShapes(DefaultTextAlignStyle, "end");
+            // editor.setCurrentTool("textAlign");
+          });
+        }}
+      >
+        <TextAlignEnd />
+      </button>
+    </div>
+  );
+};
 const ParagraphTools = ({ editor }: { editor?: any }) => {
   const currentToolId = useValue(
     "current tool id",
@@ -90,27 +195,105 @@ const ParagraphTools = ({ editor }: { editor?: any }) => {
   );
 };
 
-const ColorTools = ({ editor }: { editor?: any }) => {};
+const ColorTools = ({ editor, styles }: { editor?: any; styles?: any }) => {};
 
-const AlignTools = ({ editor }: { editor?: any }) => {
-  const textAlign = editor?.getSelectedShapeIds();
-  const styles = useRelevantStyles();
+const AlignTools = ({
+  editor,
+  styles,
+}: {
+  editor?: any;
+  styles?: ReadonlySharedStyleMap | null;
+}) => {
+  if (styles === undefined) return null;
 
-  if (textAlign === undefined) return null;
-  console.log(textAlign);
   return (
-    <button
-      className="external-button"
-      data-isactive={textAlign === "start"}
-      onClick={() => {
-        editor.run(() => {
-          editor.setStyleForNextShapes(DefaultTextAlignStyle, "start");
-          // editor.setCurrentTool("textAlign");
-        });
-      }}
-    >
-      black
-    </button>
+    <div className="flex gap-1">
+      <button
+        className="external-button"
+        data-isactive={
+          // SharedStyle オブジェクトを取得
+          (() => {
+            const sharedStyle = styles?.get(DefaultTextAlignStyle);
+            // sharedStyle が undefined でなく、かつ type が "shared" で value が "start" の場合のみ "true"
+            return sharedStyle?.type === "shared" &&
+              sharedStyle.value === "start"
+              ? "true"
+              : "false";
+          })()
+        }
+        data-can-click={
+          styles && Array.from(styles.keys()).includes(DefaultTextAlignStyle)
+            ? "true"
+            : "false"
+        }
+        onClick={() => {
+          editor.run(() => {
+            editor.setStyleForNextShapes(DefaultTextAlignStyle, "start");
+            editor.setStyleForSelectedShapes(DefaultTextAlignStyle, "start");
+            // editor.setCurrentTool("textAlign");
+          });
+        }}
+      >
+        <TextAlignStart />
+      </button>
+
+      <button
+        className="external-button"
+        data-isactive={
+          // SharedStyle オブジェクトを取得
+          (() => {
+            const sharedStyle = styles?.get(DefaultTextAlignStyle);
+            // sharedStyle が undefined でなく、かつ type が "shared" で value が "start" の場合のみ "true"
+            return sharedStyle?.type === "shared" &&
+              sharedStyle.value === "middle"
+              ? "true"
+              : "false";
+          })()
+        }
+        data-can-click={
+          styles && Array.from(styles.keys()).includes(DefaultTextAlignStyle)
+            ? "true"
+            : "false"
+        }
+        onClick={() => {
+          editor.run(() => {
+            editor.setStyleForNextShapes(DefaultTextAlignStyle, "middle");
+            editor.setStyleForSelectedShapes(DefaultTextAlignStyle, "middle");
+            // editor.setCurrentTool("textAlign");
+          });
+        }}
+      >
+        <TextAlignCenter />
+      </button>
+
+      <button
+        className="external-button"
+        data-isactive={
+          // SharedStyle オブジェクトを取得
+          (() => {
+            const sharedStyle = styles?.get(DefaultTextAlignStyle);
+            // sharedStyle が undefined でなく、かつ type が "shared" で value が "start" の場合のみ "true"
+            return sharedStyle?.type === "shared" && sharedStyle.value === "end"
+              ? "true"
+              : "false";
+          })()
+        }
+        data-can-click={
+          styles && Array.from(styles.keys()).includes(DefaultTextAlignStyle)
+            ? "true"
+            : "false"
+        }
+        onClick={() => {
+          editor.run(() => {
+            editor.setStyleForNextShapes(DefaultTextAlignStyle, "end");
+            editor.setStyleForSelectedShapes(DefaultTextAlignStyle, "end");
+            // editor.setCurrentTool("textAlign");
+          });
+        }}
+      >
+        <TextAlignEnd />
+      </button>
+    </div>
   );
 };
 

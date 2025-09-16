@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 import LogoButton from "@/components/header/LogoButton";
 import SaveButton from "./components/SaveButton";
@@ -23,7 +25,7 @@ const editorContext = createContext({} as { editor: Editor });
 
 export default function Create() {
   const [editor, setEditor] = useState<Editor | null>(null);
-  const [styles, setStyles] = useState<ReadonlySharedStyleMap | null>(null);
+  const [styles, setStyles] = useState<any>(null);
 
   useEffect(() => {
     // ① マウント時にスクロール禁止

@@ -11,6 +11,7 @@ import {
   useRelevantStyles,
 } from "tldraw";
 import "tldraw/tldraw.css";
+import StylesProvider from "../provider/StylesProvider";
 
 const FitToContent = track(() => {
   const editor = useEditor();
@@ -86,6 +87,7 @@ export default function CustomTldraw({
       >
         {/* FitToContentをTldraw内に配置 */}
         <FitToContent />
+        <StylesProvider onStylesChange={setStyles} />
       </Tldraw>
     </div>
   );
