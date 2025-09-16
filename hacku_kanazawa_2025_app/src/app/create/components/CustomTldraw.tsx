@@ -1,5 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useEffect } from "react";
-import { TLCameraOptions, Tldraw, track, useEditor } from "tldraw";
+import {
+  Editor,
+  ReadonlySharedStyleMap,
+  TLCameraOptions,
+  Tldraw,
+  track,
+  useEditor,
+  useRelevantStyles,
+} from "tldraw";
 import "tldraw/tldraw.css";
 
 const FitToContent = track(() => {
@@ -31,10 +41,14 @@ const FitToContent = track(() => {
 
 export default function CustomTldraw({
   editor,
+  styles,
   setEditor,
+  setStyles,
 }: {
   editor?: any;
+  styles?: any;
   setEditor?: any;
+  setStyles?: any;
 }) {
   const CAMERA_OPTIONS: TLCameraOptions = {
     constraints: {
@@ -63,7 +77,7 @@ export default function CustomTldraw({
   return (
     <div className="w-full h-full">
       <Tldraw
-        onMount={(editor) => {
+        onMount={(editor: Editor) => {
           setEditor(editor);
           editor.setCameraOptions(CAMERA_OPTIONS);
           editor.setCamera(editor.getCamera(), { reset: true });

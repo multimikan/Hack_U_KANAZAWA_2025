@@ -7,7 +7,7 @@ type HeaderProps = {
   shadow?: boolean;
 };
 
-export const EXTENTION_HEADER_HEIGHT = 156;
+export const EXTENTION_HEADER_HEIGHT = 164;
 
 export function getHeaderHeight(hasExtension: boolean): number {
   return hasExtension ? 60 : 160;

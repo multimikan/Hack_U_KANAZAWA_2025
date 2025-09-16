@@ -5,8 +5,15 @@ import PostButton from "./components/PostButton";
 import Header, { EXTENTION_HEADER_HEIGHT } from "@/components/header/Header";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { Editor, Tldraw } from "tldraw";
-import CustomTldraw from "./components/MyTldraw";
+import {
+  Editor,
+  ReadonlySharedStyleMap,
+  Tldraw,
+  TldrawUiA11yProvider,
+  TldrawUiComponentsProvider,
+  useTools,
+} from "tldraw";
+import CustomTldraw from "./components/CustomTldraw";
 import { createContext, useEffect, useState } from "react";
 import PresentationButton from "./components/PresentationButton";
 import { ExternalToolbar } from "./components/ToolBar";
@@ -16,6 +23,7 @@ const editorContext = createContext({} as { editor: Editor });
 
 export default function Create() {
   const [editor, setEditor] = useState<Editor | null>(null);
+  const [styles, setStyles] = useState<ReadonlySharedStyleMap | null>(null);
 
   useEffect(() => {
     // ① マウント時にスクロール禁止
@@ -29,7 +37,7 @@ export default function Create() {
   }, []);
 
   return (
-    <div>
+    <div className="tldraw__editor">
       <Header shadow={false}>
         <nav className="flex gap-4 text-sm sm:text-xs font-bold justify-items-center items-center h-10 sm:h-10 px-4 sm:px-3 sm:w-auto">
           <PresentationButton />
@@ -40,7 +48,11 @@ export default function Create() {
       <div className="pb-8 px-4 pt-2">
         {editor && (
           <editorContext.Provider value={{ editor }}>
-            <ExternalToolbar editor={editor} setEditor={setEditor} />
+            <ExternalToolbar
+              editor={editor}
+              setEditor={setEditor}
+              styles={styles}
+            />
           </editorContext.Provider>
         )}
       </div>
@@ -57,7 +69,12 @@ export default function Create() {
           }}
         >
           <SidebarTrigger />
-          <CustomTldraw editor={editor} setEditor={setEditor} />
+          <CustomTldraw
+            editor={editor}
+            setEditor={setEditor}
+            styles={styles}
+            setStyles={setStyles}
+          />
         </main>
       </SidebarProvider>
     </div>

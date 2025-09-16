@@ -1,10 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import { Editor, GeoShapeGeoStyle, SelectTool, Tldraw, useValue } from "tldraw";
-import { Pencil } from "lucide-react";
+import {
+  DefaultColorStyle,
+  DefaultStylePanelContent,
+  DefaultTextAlignStyle,
+  DefaultToolbar,
+  Editor,
+  GeoShapeGeoStyle,
+  HandToolbarItem,
+  SelectTool,
+  Tldraw,
+  useRelevantStyles,
+  useTools,
+  useTranslation,
+  useValue,
+} from "tldraw";
+import { Pencil, PencilIcon } from "lucide-react";
 import "tldraw/tldraw.css";
-
 // There's a guide at the bottom of this file!
 
 // [1]
@@ -13,9 +27,11 @@ import "tldraw/tldraw.css";
 export const ExternalToolbar = ({
   editor,
   setEditor,
+  styles,
 }: {
   editor?: any;
   setEditor?: any;
+  styles?: any;
 }) => {
   const currentToolId = useValue(
     "current tool id",
@@ -24,48 +40,77 @@ export const ExternalToolbar = ({
   );
 
   return (
-    <div className="tlui-toolbar">
-      <div className="tlui-toolbar__tools__list">
-        <button
-          type="button"
-          className="tlui-button"
-          aria-pressed={currentToolId === "select"}
-          title="Select tool"
-          onClick={() => editor.setCurrentTool("select")}
-        >
-          <Pencil className="tlui-icon" />
-        </button>
-        <button
-          type="button"
-          className="tlui-button__tool"
-          aria-pressed={currentToolId === "select"}
-          title="Select tool"
-          onClick={() => editor.setCurrentTool("select")}
-        ></button>
-        <button
-          className="external-button"
-          data-isactive={currentToolId === "draw"}
-          onClick={() => editor.setCurrentTool("draw")}
-        >
-          Pencil
-        </button>
-        <button
-          className="external-button"
-          data-isactive={
-            currentToolId === "geo" &&
-            editor?.getStyleForNextShape(GeoShapeGeoStyle) === "oval"
-          }
-          onClick={() => {
-            editor.run(() => {
-              editor.setStyleForNextShapes(GeoShapeGeoStyle, "oval");
-              editor.setCurrentTool("geo");
-            });
-          }}
-        >
-          Oval
-        </button>
-      </div>
+    <div className="external-toolbar">
+      <button
+        className="external-button"
+        data-isactive={currentToolId === "draw"}
+        onClick={() => editor.setCurrentTool("draw")}
+      >
+        <PencilIcon />
+      </button>
+      <button
+        className="external-button"
+        data-isactive={
+          currentToolId === "geo" &&
+          editor?.getStyleForNextShape(GeoShapeGeoStyle) === "oval"
+        }
+        onClick={() => {
+          editor.run(() => {
+            editor.setStyleForNextShapes(GeoShapeGeoStyle, "oval");
+            editor.setCurrentTool("geo");
+          });
+        }}
+      >
+        Oval
+      </button>
+      <AlignTools editor={editor} />
     </div>
+  );
+};
+
+function TextTools() {}
+
+const ParagraphTools = ({ editor }: { editor?: any }) => {
+  const currentToolId = useValue(
+    "current tool id",
+    () => editor?.getCurrentToolId(),
+    [editor]
+  );
+
+  return (
+    <div>
+      <button
+        className="external-button"
+        data-isactive={currentToolId === "draw"}
+        onClick={() => editor.setCurrentTool("draw")}
+      >
+        <PencilIcon />
+      </button>
+    </div>
+  );
+};
+
+const ColorTools = ({ editor }: { editor?: any }) => {};
+
+const AlignTools = ({ editor }: { editor?: any }) => {
+  const textAlign = editor?.getSelectedShapeIds();
+  const styles = useRelevantStyles();
+
+  if (textAlign === undefined) return null;
+  console.log(textAlign);
+  return (
+    <button
+      className="external-button"
+      data-isactive={textAlign === "start"}
+      onClick={() => {
+        editor.run(() => {
+          editor.setStyleForNextShapes(DefaultTextAlignStyle, "start");
+          // editor.setCurrentTool("textAlign");
+        });
+      }}
+    >
+      black
+    </button>
   );
 };
 

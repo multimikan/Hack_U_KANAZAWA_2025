@@ -1,0 +1,71 @@
+
+.external-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  /* background: linear-gradient(to bottom, #f3f3f3, #e1e1e1); */
+  /* border-bottom: 2px solid #ccc; */
+  box-shadow: inset 0 1px 0 #fff;
+  gap: 4px;
+}
+
+.external-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 8px;
+  color: #333;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  transition: all 0.15s;
+}
+
+/* アイコンとテキストの間隔 */
+.external-button span {
+  margin-top: 4px;
+  pointer-events: none;
+}
+
+/* ホバー時の光沢 */
+.external-button:hover::before {
+  content: "";
+  position: absolute;
+  top: 2px; left: 2px; right: 2px;
+  height: 100%;
+  background: rgba(237, 237, 237, 0.6);
+  border-radius: 2px 2px 0 0;
+  pointer-events: none;
+}
+
+/* 押下時（クリック直後）のエフェクト */
+.external-button:active {
+  background: linear-gradient(to bottom, #ddd, #ccc);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* トグル時のアクティブ表示 */
+.external-button[data-isactive="true"] {
+  background: rgba(0,0,0,0.2);
+  border-color: #d7d7d7;
+  box-shadow: inset 0 0 0 2px #d0d0d0;
+}
+
+/* ボタン間の仕切り線 */
+.external-toolbar .separator {
+  width: 1px;
+  height: 40px;
+  background: #bbb;
+  margin: 0 4px;
+}
+
+.external-button svg,
+.external-button img {
+  width: 16px;
+  height: 16px;
+}
