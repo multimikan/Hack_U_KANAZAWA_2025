@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <div className="">
       <Header>
-        <nav className="flex gap-4 justify-items-center items-center h-10 sm:h-10 px-4 sm:px-3 sm:w-auto">
+        <nav className="flex gap-4 justify-items-center items-center px-4 sm:px-3 sm:w-auto">
           {status === "loading" ? ( // ロード中の場合
             <div />
           ) : !session ? ( // ログインしていない場合

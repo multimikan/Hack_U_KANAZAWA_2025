@@ -33,6 +33,8 @@ import {
   Bold,
   BoldIcon,
   ItalicIcon,
+  List,
+  ListOrdered,
   Pencil,
   PencilIcon,
   TextAlignCenter,
@@ -93,6 +95,7 @@ export const ExternalToolbar = ({
         textEditor={textEditor}
         setTextEditorState={setTextEditorState}
       />
+      <div className="h"></div>
       <AlignTools editor={editor} styles={styles} />
     </div>
   );
@@ -105,20 +108,51 @@ const FontTools = ({
   textEditor?: any;
   setTextEditorState?: any;
 }) => {
-  const currentBold = textEditor?.isActive("bold") ?? false;
-  const currentItalic = textEditor?.isActive("italic") ?? false;
+  const currentBold = textEditor?.isActive?.("bold") ?? false;
+  const currentItalic = textEditor?.isActive?.("italic") ?? false;
+  const currentBullet = textEditor?.isActive?.("bulletList") ?? false;
+  const currentOrdered = textEditor?.isActive?.("orderedList") ?? false;
+
   const currentFontFamily =
-    textEditor?.getAttributes("textStyle").fontFamily ?? "DEFAULT";
+    textEditor?.getAttributes?.("textStyle")?.fontFamily ?? "DEFAULT";
   const currentFontSize =
-    textEditor?.getAttributes("textStyle").fontSize ?? "16px";
+    textEditor?.getAttributes?.("textStyle")?.fontSize ?? "16px";
 
   const handleFontFamilyChange = (value: string) => {
-    textEditor?.chain().focus().setFontFamily(value).run();
+    if (!textEditor) return;
+    const selectionEmpty = textEditor.state.selection.empty;
+    if (selectionEmpty) {
+      textEditor
+        .chain()
+        .focus()
+        .setStoredMarks([{ type: "textStyle", attrs: { fontFamily: value } }])
+        .run();
+    } else {
+      textEditor
+        .chain()
+        .focus()
+        .updateAttributes("textStyle", { fontFamily: value })
+        .run();
+    }
     setTextEditorState?.(textEditor.state);
   };
 
   const handleFontSizeChange = (value: string) => {
-    textEditor?.chain().focus().setFontSize(value).run();
+    if (!textEditor) return;
+    const selectionEmpty = textEditor.state.selection.empty;
+    if (selectionEmpty) {
+      textEditor
+        .chain()
+        .focus()
+        .setStoredMarks([{ type: "textStyle", attrs: { fontSize: value } }])
+        .run();
+    } else {
+      textEditor
+        .chain()
+        .focus()
+        .updateAttributes("textStyle", { fontSize: value })
+        .run();
+    }
     setTextEditorState?.(textEditor.state);
   };
 
@@ -126,8 +160,7 @@ const FontTools = ({
     if (!textEditor) return;
     const selectionEmpty = textEditor.state.selection.empty;
     if (selectionEmpty) {
-      const nextMarks = textEditor.state.storedMarks || {};
-      nextMarks.bold
+      currentBold
         ? textEditor.chain().unsetBold().focus().run()
         : textEditor.chain().setBold().focus().run();
     } else {
@@ -140,8 +173,7 @@ const FontTools = ({
     if (!textEditor) return;
     const selectionEmpty = textEditor.state.selection.empty;
     if (selectionEmpty) {
-      const nextMarks = textEditor.state.storedMarks || {};
-      nextMarks.italic
+      currentItalic
         ? textEditor.chain().unsetItalic().focus().run()
         : textEditor.chain().setItalic().focus().run();
     } else {
@@ -150,51 +182,80 @@ const FontTools = ({
     setTextEditorState?.(textEditor.state);
   };
 
+  const toggleBulletList = () => {
+    if (!textEditor) return;
+    textEditor.chain().focus().toggleBulletList().run();
+    setTextEditorState?.(textEditor.state);
+  };
+
+  const toggleOrderedList = () => {
+    if (!textEditor) return;
+    textEditor.chain().focus().toggleOrderedList().run();
+    setTextEditorState?.(textEditor.state);
+  };
+
   return (
-    <div className="flex gap-2 items-center">
-      {/* フォントファミリー */}
-      <select
-        value={currentFontFamily}
-        onPointerDown={stopEventPropagation}
-        onChange={(e) => handleFontFamilyChange(e.target.value)}
-      >
-        {fontOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+    <div className="gap-1 items-center">
+      <div className="flex gap-1 pb-1">
+        <select
+          className="border"
+          value={currentFontFamily}
+          onPointerDown={stopEventPropagation}
+          onChange={(e) => handleFontFamilyChange(e.target.value)}
+        >
+          {fontOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
 
-      {/* フォントサイズ */}
-      <select
-        value={currentFontSize}
-        onPointerDown={stopEventPropagation}
-        onChange={(e) => handleFontSizeChange(e.target.value)}
-      >
-        {fontSizeOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+        <select
+          className="border"
+          value={currentFontSize}
+          onPointerDown={stopEventPropagation}
+          onChange={(e) => handleFontSizeChange(e.target.value)}
+        >
+          {fontSizeOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="flex gap-1">
+        <button
+          className={`external-button ${currentBold ? "active" : ""}`}
+          onPointerDown={stopEventPropagation}
+          onClick={toggleBold}
+        >
+          <BoldIcon />
+        </button>
 
-      {/* Bold */}
-      <button
-        className={`external-button ${currentBold ? "active" : ""}`}
-        onPointerDown={stopEventPropagation}
-        onClick={toggleBold}
-      >
-        <BoldIcon />
-      </button>
+        <button
+          className={`external-button ${currentItalic ? "active" : ""}`}
+          onPointerDown={stopEventPropagation}
+          onClick={toggleItalic}
+        >
+          <ItalicIcon />
+        </button>
 
-      {/* Italic */}
-      <button
-        className={`external-button ${currentItalic ? "active" : ""}`}
-        onPointerDown={stopEventPropagation}
-        onClick={toggleItalic}
-      >
-        <ItalicIcon />
-      </button>
+        <button
+          className={`external-button ${currentBullet ? "active" : ""}`}
+          onPointerDown={stopEventPropagation}
+          onClick={toggleBulletList}
+        >
+          <List />
+        </button>
+
+        <button
+          className={`external-button ${currentOrdered ? "active" : ""}`}
+          onPointerDown={stopEventPropagation}
+          onClick={toggleOrderedList}
+        >
+          <ListOrdered />
+        </button>
+      </div>
     </div>
   );
 };

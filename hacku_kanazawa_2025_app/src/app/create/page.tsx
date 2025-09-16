@@ -51,13 +51,13 @@ export default function Create() {
   return (
     <div className="tldraw__editor">
       <Header shadow={false}>
-        <nav className="flex gap-4 text-sm sm:text-xs font-bold justify-items-center items-center h-10 sm:h-10 px-4 sm:px-3 sm:w-auto">
+        <nav className="flex gap-4 text-sm sm:text-xs font-bold justify-items-center items-center px-4 sm:px-3 sm:w-auto">
           <PresentationButton />
           <SaveButton />
           <PostButton />
         </nav>
       </Header>
-      <div className="pb-8 px-4 pt-2">
+      <div className="pb-2 px-4 pt-2">
         {editor && (
           <editorContext.Provider value={{ editor }}>
             <ExternalToolbar
@@ -82,7 +82,6 @@ export default function Create() {
             overflow: "hidden",
           }}
         >
-          <SidebarTrigger />
           <CustomTldraw
             editor={editor}
             setEditor={setEditor}
