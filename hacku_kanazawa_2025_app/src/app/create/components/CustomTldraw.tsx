@@ -45,11 +45,15 @@ export default function CustomTldraw({
   styles,
   setEditor,
   setStyles,
+  textEditor,
+  setTextEditorState,
 }: {
   editor?: any;
   styles?: any;
   setEditor?: any;
   setStyles?: any;
+  textEditor?: any;
+  setTextEditorState?: any;
 }) {
   const CAMERA_OPTIONS: TLCameraOptions = {
     constraints: {
@@ -82,6 +86,7 @@ export default function CustomTldraw({
           setEditor(editor);
           editor.setCameraOptions(CAMERA_OPTIONS);
           editor.setCamera(editor.getCamera(), { reset: true });
+          setTextEditorState(textEditor ?? null);
         }}
         // components={{ Toolbar: null }}
       >

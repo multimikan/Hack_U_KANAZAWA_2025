@@ -7,6 +7,10 @@ import PostButton from "./components/PostButton";
 import Header, { EXTENTION_HEADER_HEIGHT } from "@/components/header/Header";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { EditorEvents as TextEditorEvents } from "@tiptap/core";
+import FontFamily from "@tiptap/extension-font-family";
+import TextStyle from "@tiptap/extension-text-style";
+import { EditorState as TextEditorState } from "@tiptap/pm/state";
 import {
   Editor,
   ReadonlySharedStyleMap,
@@ -14,6 +18,7 @@ import {
   TldrawUiA11yProvider,
   TldrawUiComponentsProvider,
   useTools,
+  useValue,
 } from "tldraw";
 import CustomTldraw from "./components/CustomTldraw";
 import { createContext, useEffect, useState } from "react";
@@ -26,7 +31,12 @@ const editorContext = createContext({} as { editor: Editor });
 export default function Create() {
   const [editor, setEditor] = useState<Editor | null>(null);
   const [styles, setStyles] = useState<any>(null);
-
+  const textEditor = useValue("textEditor", () => editor?.getRichTextEditor(), [
+    editor,
+  ]);
+  const [_, setTextEditorState] = useState<TextEditorState | null>(
+    textEditor?.state ?? null
+  );
   useEffect(() => {
     // ① マウント時にスクロール禁止
     const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -54,6 +64,8 @@ export default function Create() {
               editor={editor}
               setEditor={setEditor}
               styles={styles}
+              textEditor={textEditor}
+              setTextEditorState={setTextEditorState}
             />
           </editorContext.Provider>
         )}
@@ -76,6 +88,8 @@ export default function Create() {
             setEditor={setEditor}
             styles={styles}
             setStyles={setStyles}
+            textEditor={textEditor}
+            setTextEditorState={setTextEditorState}
           />
         </main>
       </SidebarProvider>

@@ -3,7 +3,7 @@
   align-items: center;
   padding: 4px 8px;
   box-shadow: inset 0 1px 0 #fff;
-  gap: 4px;
+  gap: 64px;
 }
 
 .external-button {
@@ -45,7 +45,7 @@
 
 /* アクティブ（トグルON）- 詳細度を上げる */
 .external-button[data-isactive="true"]:not([data-can-click="false"]) {
-  background: #ececec;
+  background: #f1f1f1;
   border-color: #aaa;
 }
 
