@@ -12,17 +12,35 @@ export default function Home() {
   const { data: session, status } = useSession();
 
   return (
-    <div className="">
-      <Header>
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: -1,
+        background:
+          // 横方向ピンク（左→右）を上に重ね、縦方向フェードを下に重ねる
+          `linear-gradient(
+  90deg,
+  rgba(255,192,203,0.30) 0%,
+  rgba(255,192,203,0.15) 45%,
+  rgba(255,192,203,0.08) 70%,
+  rgba(255,192,203,0) 100%
+),
+linear-gradient(
+  180deg,
+  rgba(255,255,255,0) 10%,  /* ← さらに早く透明から開始 */
+  #ffffff 50%               /* ← 半分で白に切り替え */
+)
+
+`,
+      }}
+    >
+      <Header className="bg-transparent" shadow={false}>
         <nav className="flex gap-4 justify-items-center items-center px-4 sm:px-3 sm:w-auto">
           {status === "loading" ? ( // ロード中の場合
             <div />
           ) : !session ? ( // ログインしていない場合
-            // <LoginButton/>
-            <div className="flex gap-4">
-              <UserButton />
-              <CreateButton />
-            </div>
+            <LoginButton />
           ) : (
             // ログインしている場合
             <div className="flex gap-4">

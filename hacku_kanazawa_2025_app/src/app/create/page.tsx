@@ -25,10 +25,14 @@ import { createContext, useEffect, useState } from "react";
 import PresentationButton from "./components/PresentationButton";
 import { ExternalToolbar } from "./components/ToolBar";
 import "tldraw/tldraw.css";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const editorContext = createContext({} as { editor: Editor });
 
 export default function Create() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [editor, setEditor] = useState<Editor | null>(null);
   const [styles, setStyles] = useState<any>(null);
   const textEditor = useValue("textEditor", () => editor?.getRichTextEditor(), [
@@ -48,10 +52,12 @@ export default function Create() {
     };
   }, []);
 
+  if (!session) return router.push("./");
+
   return (
     <div className="tldraw__editor">
       <Header shadow={false}>
-        <nav className="flex gap-4 text-sm sm:text-xs font-bold justify-items-center items-center px-4 sm:px-3 sm:w-auto">
+        <nav className="flex gap-2 text-sm sm:text-xs font-bold justify-items-center items-center px-4 sm:px-3 sm:w-auto">
           <PresentationButton />
           <SaveButton />
           <PostButton />

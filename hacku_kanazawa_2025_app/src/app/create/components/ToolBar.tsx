@@ -90,13 +90,16 @@ export const ExternalToolbar = ({
   );
 
   return (
-    <div className="external-toolbar">
-      <FontTools
-        textEditor={textEditor}
-        setTextEditorState={setTextEditorState}
-      />
-      <div className="h"></div>
-      <AlignTools editor={editor} styles={styles} />
+    <div className="external-toolbar flex divide-x divide-gray">
+      <div className="pr-16">
+        <FontTools
+          textEditor={textEditor}
+          setTextEditorState={setTextEditorState}
+        />
+      </div>
+      <div className="pr-16">
+        <AlignTools editor={editor} styles={styles} />
+      </div>
     </div>
   );
 };
@@ -114,7 +117,7 @@ const FontTools = ({
   const currentOrdered = textEditor?.isActive?.("orderedList") ?? false;
 
   const currentFontFamily =
-    textEditor?.getAttributes?.("textStyle")?.fontFamily ?? "DEFAULT";
+    textEditor?.getAttributes?.("textStyle")?.fontFamily ?? "serif";
   const currentFontSize =
     textEditor?.getAttributes?.("textStyle")?.fontSize ?? "16px";
 
@@ -195,10 +198,10 @@ const FontTools = ({
   };
 
   return (
-    <div className="gap-1 items-center">
+    <div className="gap-1 items-center justify-items-center">
       <div className="flex gap-1 pb-1">
         <select
-          className="border"
+          className="border rounded-md"
           value={currentFontFamily}
           onPointerDown={stopEventPropagation}
           onChange={(e) => handleFontFamilyChange(e.target.value)}
@@ -211,7 +214,7 @@ const FontTools = ({
         </select>
 
         <select
-          className="border"
+          className="border rounded-md"
           value={currentFontSize}
           onPointerDown={stopEventPropagation}
           onChange={(e) => handleFontSizeChange(e.target.value)}
@@ -223,7 +226,7 @@ const FontTools = ({
           ))}
         </select>
       </div>
-      <div className="flex gap-1">
+      <div className="flex gap-4">
         <button
           className={`external-button ${currentBold ? "active" : ""}`}
           onPointerDown={stopEventPropagation}
