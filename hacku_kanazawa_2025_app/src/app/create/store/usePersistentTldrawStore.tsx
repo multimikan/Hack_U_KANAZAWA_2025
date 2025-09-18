@@ -1,3 +1,4 @@
+"use client";
 // usePersistentTldrawStore.ts
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useLayoutEffect, useMemo, useState } from "react";
