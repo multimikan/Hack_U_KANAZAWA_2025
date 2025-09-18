@@ -1,11 +1,10 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
     args:
       [
-        'build',
-        '-f', 'hacku_kanazawa_2025_app/Dockerfile',
-        '-t', 'gcr.io/$PROJECT_ID/next-app',
-        '.'
+        '-c',
+        'cd hacku_kanazawa_2025_app && docker build -t gcr.io/$PROJECT_ID/next-app .'
       ]
 images:
   - 'gcr.io/$PROJECT_ID/next-app'
