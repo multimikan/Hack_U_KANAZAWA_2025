@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { AnyExtension, EditorEvents as TextEditorEvents } from "@tiptap/core";
