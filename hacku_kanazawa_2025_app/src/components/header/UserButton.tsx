@@ -10,12 +10,14 @@ export default function UserButton() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  if (!session) return;
+
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
         <button>
           <Image
-            src={session?.user?.image || ""}
+            src={session?.user?.image}
             alt="User Image"
             width={35}
             height={35}
