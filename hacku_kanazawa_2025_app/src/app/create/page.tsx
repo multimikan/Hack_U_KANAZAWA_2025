@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
+
 import SaveButton from "./components/SaveButton";
 import PostButton from "./components/PostButton";
 import Header, { EXTENTION_HEADER_HEIGHT } from "@/components/header/Header";
