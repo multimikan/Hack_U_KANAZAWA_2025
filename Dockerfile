@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-alpine
 WORKDIR /usr/src/app
 COPY hacku_kanazawa_2025_app/package*.json ./
 RUN npm ci
