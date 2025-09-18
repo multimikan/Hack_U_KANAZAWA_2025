@@ -1,0 +1,69 @@
+.external-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 4px 16px;
+  box-shadow: inset 0 1px 0 #fff;
+  gap: 48px;
+}
+
+.external-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 8px;
+  color: #333;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  transition: all 0.15s;
+}
+
+/* アイコンとテキストの間隔 */
+.external-button span {
+  margin-top: 4px;
+  pointer-events: none;
+}
+
+/* ホバー時 - 詳細度を上げる */
+.external-button:hover:not([data-can-click="false"]) {
+  background: #e6e6e6;
+}
+
+/* disabled 状態 - 詳細度を最高にする */
+.external-button[data-can-click="false"] {
+  background: #fefefe !important;
+  color: #7a7a7a !important;
+  cursor: not-allowed !important;
+  opacity: 0.4 !important;
+  pointer-events: none !important;
+}
+
+/* アクティブ（トグルON）- 詳細度を上げる */
+.external-button[data-isactive="true"]:not([data-can-click="false"]) {
+  background: #f1f1f1;
+  border-color: #aaa;
+}
+
+/* アクティブ状態のホバー効果 */
+.external-button[data-isactive="true"]:not([data-can-click="false"]):hover {
+  background: #c5c5c5;
+}
+
+/* ボタン間の仕切り線 */
+.external-toolbar .separator {
+  width: 1px;
+  height: 40px;
+  background: #bbb;
+  margin: 0 4px;
+}
+
+.external-button svg,
+.external-button img {
+  width: 16px;
+  height: 16px;
+}

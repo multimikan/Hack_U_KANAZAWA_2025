@@ -1,6 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useEffect } from "react";
-import { TLCameraOptions, Tldraw, track, useEditor } from "tldraw";
+import {
+  DefaultSpinner,
+  Editor,
+  ReadonlySharedStyleMap,
+  TLCameraOptions,
+  Tldraw,
+  track,
+  useEditor,
+  useRelevantStyles,
+} from "tldraw";
 import "tldraw/tldraw.css";
+import StylesProvider from "../provider/StylesProvider";
+import { usePersistentTldrawStore } from "../store/usePersistentTldrawStore";
+import { UUIDTypes } from "uuid";
+import { PostStyle } from "@/lib/firebase/firebase";
 
 const FitToContent = track(() => {
   const editor = useEditor();
@@ -30,12 +45,42 @@ const FitToContent = track(() => {
 });
 
 export default function CustomTldraw({
+  postStyle,
   editor,
+  styles,
   setEditor,
+  setStyles,
+  textEditor,
+  setTextEditorState,
+  store,
+  loadingState,
 }: {
+  postStyle: PostStyle;
   editor?: any;
+  styles?: any;
   setEditor?: any;
+  setStyles?: any;
+  textEditor?: any;
+  setTextEditorState?: any;
+  store?: any;
+  loadingState?: any;
 }) {
+  if (loadingState.status === "loading") {
+    return (
+      <div className="tldraw__editor">
+        <DefaultSpinner />
+      </div>
+    );
+  }
+  if (loadingState.status === "error") {
+    return (
+      <div className="tldraw__editor">
+        <h2>Error!</h2>
+        <p>{loadingState.error}</p>
+      </div>
+    );
+  }
+
   const CAMERA_OPTIONS: TLCameraOptions = {
     constraints: {
       initialZoom: "fit-min",
@@ -63,15 +108,18 @@ export default function CustomTldraw({
   return (
     <div className="w-full h-full">
       <Tldraw
-        onMount={(editor) => {
+        onMount={(editor: Editor) => {
           setEditor(editor);
           editor.setCameraOptions(CAMERA_OPTIONS);
           editor.setCamera(editor.getCamera(), { reset: true });
+          setTextEditorState(textEditor ?? null);
         }}
         // components={{ Toolbar: null }}
+        store={store}
       >
         {/* FitToContentをTldraw内に配置 */}
         <FitToContent />
+        <StylesProvider onStylesChange={setStyles} />
       </Tldraw>
     </div>
   );
