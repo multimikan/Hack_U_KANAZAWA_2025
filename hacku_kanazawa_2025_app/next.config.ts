@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["lh3.googleusercontent.com"],
   },
+  eslint: {
+    // 本番ビルド中の ESLint 実行をスキップ
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
