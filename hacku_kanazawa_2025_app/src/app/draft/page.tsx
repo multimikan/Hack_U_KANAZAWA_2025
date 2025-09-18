@@ -5,7 +5,6 @@ import UserButton from "@/components/header/UserButton";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { loadData, PostDocument } from "@/lib/firebase/firebase";
-import Create from "../create/page";
 
 export default function Draft() {
   const { data: session, status } = useSession();
