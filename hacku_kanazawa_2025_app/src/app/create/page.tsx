@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = "force-dynamic";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import SaveButton from "./components/SaveButton";
