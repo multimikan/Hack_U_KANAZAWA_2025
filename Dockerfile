@@ -1,5 +1,3 @@
-# workspace/Dockerfile
-
 # 1. ビルドステージ
 FROM node:18-alpine AS builder
 
@@ -39,29 +37,26 @@ ENV NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 
 WORKDIR /app
 
-# package.json と package-lock.json をコピー＆全依存インストール
+# ソース全体を先にコピーして依存インストール
 COPY hacku_kanazawa_2025_app/package.json hacku_kanazawa_2025_app/package-lock.json ./
 RUN npm ci
 
-# ソースコードコピー＆ビルド
 COPY hacku_kanazawa_2025_app ./
 RUN npm run build
 
-# 2. 本番ステージ
+# 2. 本番イメージ
 FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-# 本番依存のみインストール
 COPY hacku_kanazawa_2025_app/package.json hacku_kanazawa_2025_app/package-lock.json ./
 RUN npm ci --omit=dev
 
-# ビルド成果物と必要ファイルをコピー
+# ビルド成果物と設定ファイルをコピー
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/next.config.js ./next.config.js
-COPY --from=builder /app/.env* ./
 
 EXPOSE 8080
 CMD ["npm", "start"]
