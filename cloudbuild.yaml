@@ -1,30 +1,64 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
-      [
-        'build',
-        '-t',
-        'gcr.io/$PROJECT_ID/next-app',
-        '-f',
-        'Dockerfile',
-        '.'
-      ]
-    env:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/next-app'
+      - '-f'
+      - 'Dockerfile'
+      # Docker build引数として環境変数を明示的に渡す
+      - '--build-arg'
       - 'GOOGLE_CLIENT_ID=${_GOOGLE_CLIENT_ID}'
+      - '--build-arg'
       - 'GOOGLE_CLIENT_SECRET=${_GOOGLE_CLIENT_SECRET}'
+      - '--build-arg'
       - 'GOOGLE_CLIENT_EMAIL=${_GOOGLE_CLIENT_EMAIL}'
+      - '--build-arg'
       - 'GOOGLE_PRIVATE_KEY=${_GOOGLE_PRIVATE_KEY}'
+      - '--build-arg'
       - 'GOOGLE_STOGAGE_BUCKET=${_GOOGLE_STOGAGE_BUCKET}'
+      - '--build-arg'
       - 'GOOGLE_APPLICATION_CREDENTIALS=${_GOOGLE_APPLICATION_CREDENTIALS}'
-      - 'PROJECT_ID=${_PROJECT_ID}'
+      - '--build-arg'
+      - 'PROJECT_ID=${PROJECT_ID}'
+      - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_API_KEY=${_NEXT_PUBLIC_FIREBASE_API_KEY}'
+      - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${_NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}'
+      - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=${_NEXT_PUBLIC_FIREBASE_PROJECT_ID}'
+      - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${_NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}'
+      - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${_NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}'
+      - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_APP_ID=${_NEXT_PUBLIC_FIREBASE_APP_ID}'
+      - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID}'
+      - '--build-arg'
       - 'AUTH_SECRET=${_AUTH_SECRET}'
+      - '--build-arg'
       - 'AUTH_URL=${_AUTH_URL}'
+      - '.'
+
 images:
   - 'gcr.io/$PROJECT_ID/next-app'
+
+# 代入変数のデフォルト値（オプション）
+substitutions:
+  _GOOGLE_CLIENT_ID: ''
+  _GOOGLE_CLIENT_SECRET: ''
+  _GOOGLE_CLIENT_EMAIL: ''
+  _GOOGLE_PRIVATE_KEY: ''
+  _GOOGLE_STOGAGE_BUCKET: ''
+  _GOOGLE_APPLICATION_CREDENTIALS: ''
+  _PROJECT_ID: '${PROJECT_ID}'
+  _NEXT_PUBLIC_FIREBASE_API_KEY: ''
+  _NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ''
+  _NEXT_PUBLIC_FIREBASE_PROJECT_ID: ''
+  _NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ''
+  _NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ''
+  _NEXT_PUBLIC_FIREBASE_APP_ID: ''
+  _NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ''
+  _AUTH_SECRET: ''
+  _AUTH_URL: ''
