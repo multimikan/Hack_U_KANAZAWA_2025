@@ -19,7 +19,7 @@
 // }
 
 // export const authOptions: NextAuthOptions = {
-//   providers: [
+//   providers: [ 
 //     CredentialsProvider({
 //       credentials: {},
 //       // @ts-ignore:理由を書く
