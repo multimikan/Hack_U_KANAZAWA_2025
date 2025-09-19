@@ -21,7 +21,7 @@ import { usePersistentTldrawStore } from "./store/usePersistentTldrawStore";
 
 const editorContext = createContext({} as { editor: Editor });
 
-export default function Create() {
+export function CreateParams() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const postIdParam = searchParams.get("id");
@@ -96,54 +96,60 @@ export default function Create() {
   }, []);
 
   return (
-    <Suspense fallback={<div>loading...</div>}>
-      <div className="tldraw__editor">
-        <Header shadow={false}>
-          <nav className="flex gap-2 text-sm sm:text-xs font-bold justify-items-center items-center px-4 sm:px-3 sm:w-auto">
-            <PresentationButton />
-            <SaveButton style={postStyle!} store={store} />
-            <PostButton />
-          </nav>
-        </Header>
-        <div className="pb-2 px-4 pt-2">
-          {editor && (
-            <editorContext.Provider value={{ editor }}>
-              <ExternalToolbar
-                editor={editor}
-                setEditor={setEditor}
-                styles={styles}
-                textEditor={textEditor}
-                setTextEditorState={setTextEditorState}
-              />
-            </editorContext.Provider>
-          )}
-        </div>
-
-        <SidebarProvider>
-          <AppSidebar />
-          <main
-            className="w-full"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              height: `calc(100vh - ${EXTENTION_HEADER_HEIGHT}px)`,
-              overflow: "hidden",
-            }}
-          >
-            <CustomTldraw
-              postStyle={postStyle!}
+    <div className="tldraw__editor">
+      <Header shadow={false}>
+        <nav className="flex gap-2 text-sm sm:text-xs font-bold justify-items-center items-center px-4 sm:px-3 sm:w-auto">
+          <PresentationButton />
+          <SaveButton style={postStyle!} store={store} />
+          <PostButton />
+        </nav>
+      </Header>
+      <div className="pb-2 px-4 pt-2">
+        {editor && (
+          <editorContext.Provider value={{ editor }}>
+            <ExternalToolbar
               editor={editor}
               setEditor={setEditor}
               styles={styles}
-              setStyles={setStyles}
               textEditor={textEditor}
               setTextEditorState={setTextEditorState}
-              store={store}
-              loadingState={loadingState}
             />
-          </main>
-        </SidebarProvider>
+          </editorContext.Provider>
+        )}
       </div>
+
+      <SidebarProvider>
+        <AppSidebar />
+        <main
+          className="w-full"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            height: `calc(100vh - ${EXTENTION_HEADER_HEIGHT}px)`,
+            overflow: "hidden",
+          }}
+        >
+          <CustomTldraw
+            postStyle={postStyle!}
+            editor={editor}
+            setEditor={setEditor}
+            styles={styles}
+            setStyles={setStyles}
+            textEditor={textEditor}
+            setTextEditorState={setTextEditorState}
+            store={store}
+            loadingState={loadingState}
+          />
+        </main>
+      </SidebarProvider>
+    </div>
+  );
+}
+
+export default function Create() {
+  return (
+    <Suspense fallback={<div>loading...</div>}>
+      <CreateParams />
     </Suspense>
   );
 }
