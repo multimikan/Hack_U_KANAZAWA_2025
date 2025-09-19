@@ -36,9 +36,9 @@ steps:
       - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID}'
       - '--build-arg'
-      - 'AUTH_SECRET=${_AUTH_SECRET}'
+      - 'NEXTAUTH_SECRET=${_NEXTAUTH_SECRET}'
       - '--build-arg'
-      - 'AUTH_URL=${_AUTH_URL}'
+      - 'NEXTAUTH_URL=${_NEXTAUTH_URL}'
       - '.'
 
 images:
@@ -60,5 +60,5 @@ substitutions:
   _NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ''
   _NEXT_PUBLIC_FIREBASE_APP_ID: ''
   _NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ''
-  _AUTH_SECRET: ''
-  _AUTH_URL: ''
+  _NEXTAUTH_SECRET: ''
+  _NEXTAUTH_URL: ''
