@@ -1,6 +1,8 @@
-FROM node:18-alpine
+# workspace/Dockerfile
 
-# Build args
+# 1. ビルドステージ
+FROM node:18-alpine AS builder
+
 ARG AUTH_SECRET
 ARG AUTH_URL
 ARG GOOGLE_CLIENT_ID
@@ -18,7 +20,6 @@ ARG NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
 ARG NEXT_PUBLIC_FIREBASE_APP_ID
 ARG NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 
-# Set env vars
 ENV AUTH_SECRET=$AUTH_SECRET
 ENV AUTH_URL=$AUTH_URL
 ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
@@ -38,19 +39,29 @@ ENV NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 
 WORKDIR /app
 
-# package.json と package-lock.json をコピー
+# package.json と package-lock.json をコピー＆全依存インストール
 COPY hacku_kanazawa_2025_app/package.json hacku_kanazawa_2025_app/package-lock.json ./
+RUN npm ci
 
-# npm ci でインストール（package-lock.json に従う）
-RUN npm ci --only=production
-
-# ソースコード全体をコピー
+# ソースコードコピー＆ビルド
 COPY hacku_kanazawa_2025_app ./
-
-# Next.js アプリをビルド
 RUN npm run build
 
-EXPOSE 8080
+# 2. 本番ステージ
+FROM node:18-alpine AS runner
 
-# 本番モードで起動
+WORKDIR /app
+
+# 本番依存のみインストール
+COPY hacku_kanazawa_2025_app/package.json hacku_kanazawa_2025_app/package-lock.json ./
+RUN npm ci --omit=dev
+
+# ビルド成果物と必要ファイルをコピー
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/next.config.js ./next.config.js
+COPY --from=builder /app/.env* ./
+
+EXPOSE 8080
 CMD ["npm", "start"]

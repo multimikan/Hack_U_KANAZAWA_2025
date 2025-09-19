@@ -1,26 +1,28 @@
+# workspace/cloudbuild.yaml
+
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
-        'build',
-        '--build-arg', 'AUTH_SECRET=$_AUTH_SECRET',
-        '--build-arg', 'AUTH_URL=$_AUTH_URL',
-        '--build-arg', 'GOOGLE_CLIENT_ID=$_GOOGLE_CLIENT_ID',
-        '--build-arg', 'GOOGLE_CLIENT_SECRET=$_GOOGLE_CLIENT_SECRET',
-        '--build-arg', 'GOOGLE_CLIENT_EMAIL=$_GOOGLE_CLIENT_EMAIL',
-        '--build-arg', 'GOOGLE_PRIVATE_KEY=$_GOOGLE_PRIVATE_KEY',
-        '--build-arg', 'GOOGLE_STORAGE_BUCKET=$_GOOGLE_STORAGE_BUCKET',
-        '--build-arg', 'GOOGLE_APPLICATION_CREDENTIALS=$_GOOGLE_APPLICATION_CREDENTIALS',
-        '--build-arg', 'NEXTAUTH_SECRET=$_NEXTAUTH_SECRET',
-        '--build-arg', 'NEXT_PUBLIC_FIREBASE_API_KEY=$_NEXT_PUBLIC_FIREBASE_API_KEY',
-        '--build-arg', 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$_NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN',
-        '--build-arg', 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=$_NEXT_PUBLIC_FIREBASE_PROJECT_ID',
-        '--build-arg', 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=$_NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET',
-        '--build-arg', 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=$_NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
-        '--build-arg', 'NEXT_PUBLIC_FIREBASE_APP_ID=$_NEXT_PUBLIC_FIREBASE_APP_ID',
-        '--build-arg', 'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID',
-        '-t', 'gcr.io/$PROJECT_ID/next-app',
-        '.'
+        "build",
+        "--build-arg", "AUTH_SECRET=$_AUTH_SECRET",
+        "--build-arg", "AUTH_URL=$_AUTH_URL",
+        "--build-arg", "GOOGLE_CLIENT_ID=$_GOOGLE_CLIENT_ID",
+        "--build-arg", "GOOGLE_CLIENT_SECRET=$_GOOGLE_CLIENT_SECRET",
+        "--build-arg", "GOOGLE_CLIENT_EMAIL=$_GOOGLE_CLIENT_EMAIL",
+        "--build-arg", "GOOGLE_PRIVATE_KEY=$_GOOGLE_PRIVATE_KEY",
+        "--build-arg", "GOOGLE_STORAGE_BUCKET=$_GOOGLE_STORAGE_BUCKET",
+        "--build-arg", "GOOGLE_APPLICATION_CREDENTIALS=$_GOOGLE_APPLICATION_CREDENTIALS",
+        "--build-arg", "NEXTAUTH_SECRET=$_NEXTAUTH_SECRET",
+        "--build-arg", "NEXT_PUBLIC_FIREBASE_API_KEY=$_NEXT_PUBLIC_FIREBASE_API_KEY",
+        "--build-arg", "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$_NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
+        "--build-arg", "NEXT_PUBLIC_FIREBASE_PROJECT_ID=$_NEXT_PUBLIC_FIREBASE_PROJECT_ID",
+        "--build-arg", "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=$_NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET",
+        "--build-arg", "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=$_NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+        "--build-arg", "NEXT_PUBLIC_FIREBASE_APP_ID=$_NEXT_PUBLIC_FIREBASE_APP_ID",
+        "--build-arg", "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID",
+        "-t", "gcr.io/$PROJECT_ID/next-app",
+        "."
       ]
 images:
-  - 'gcr.io/$PROJECT_ID/next-app'
+  - "gcr.io/$PROJECT_ID/next-app"
