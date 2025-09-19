@@ -1,4 +1,4 @@
-# Dockerfile
+# workspace/Dockerfile
 FROM node:18-alpine
 
 # Build args
@@ -38,10 +38,15 @@ ENV NEXT_PUBLIC_FIREBASE_APP_ID=$NEXT_PUBLIC_FIREBASE_APP_ID
 ENV NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 
 WORKDIR /app
-COPY package.json yarn.lock ./
+
+# hacku_kanazawa_2025_app 以下の package.json をコピー
+COPY hacku_kanazawa_2025_app/package.json hacku_kanazawa_2025_app/yarn.lock ./
 RUN yarn install --frozen-lockfile
-COPY . .
+
+# ソースコード全体をコピー
+COPY hacku_kanazawa_2025_app ./
+
 RUN yarn build
 
 EXPOSE 8080
-CMD ["yarn","start"]
+CMD ["yarn", "start"]
