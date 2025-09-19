@@ -18,7 +18,7 @@ import { usePersistentTldrawStore } from "../store/usePersistentTldrawStore";
 import { UUIDTypes } from "uuid";
 import { PostStyle } from "@/lib/firebase/firebase";
 
-export const FitToContent = track(() => {
+const FitToContent = track(() => {
   const editor = useEditor();
 
   useEffect(() => {
@@ -44,30 +44,6 @@ export const FitToContent = track(() => {
 
   return null;
 });
-
-export const CAMERA_OPTIONS: TLCameraOptions = {
-  constraints: {
-    initialZoom: "fit-min",
-    baseZoom: "fit-min",
-    bounds: {
-      x: 0,
-      y: 0,
-      w: 1600,
-      h: 2147483647,
-    },
-    behavior: {
-      x: "inside",
-      y: "inside",
-    },
-    padding: { x: 0, y: 0 },
-    origin: { x: 0, y: 0 },
-  },
-  isLocked: false,
-  panSpeed: 1,
-  zoomSpeed: 0,
-  zoomSteps: [1],
-  wheelBehavior: "pan",
-};
 
 export default function CustomTldraw({
   postStyle,
@@ -105,6 +81,30 @@ export default function CustomTldraw({
       </div>
     );
   }
+
+  const CAMERA_OPTIONS: TLCameraOptions = {
+    constraints: {
+      initialZoom: "fit-min",
+      baseZoom: "fit-min",
+      bounds: {
+        x: 0,
+        y: 0,
+        w: 1600,
+        h: 2147483647,
+      },
+      behavior: {
+        x: "inside",
+        y: "inside",
+      },
+      padding: { x: 0, y: 0 },
+      origin: { x: 0, y: 0 },
+    },
+    isLocked: false,
+    panSpeed: 1,
+    zoomSpeed: 0,
+    zoomSteps: [1],
+    wheelBehavior: "pan",
+  };
 
   return (
     <div className="w-full h-full">
