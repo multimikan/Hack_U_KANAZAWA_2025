@@ -1,4 +1,3 @@
-# workspace/Dockerfile
 FROM node:18-alpine
 
 # Build args
@@ -39,14 +38,19 @@ ENV NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 
 WORKDIR /app
 
-# hacku_kanazawa_2025_app 以下の package.json をコピー
-COPY hacku_kanazawa_2025_app/package.json hacku_kanazawa_2025_app/yarn.lock ./
-RUN yarn install --frozen-lockfile
+# package.json と package-lock.json をコピー
+COPY hacku_kanazawa_2025_app/package.json hacku_kanazawa_2025_app/package-lock.json ./
+
+# npm ci でインストール（package-lock.json に従う）
+RUN npm ci --only=production
 
 # ソースコード全体をコピー
 COPY hacku_kanazawa_2025_app ./
 
-RUN yarn build
+# Next.js アプリをビルド
+RUN npm run build
 
 EXPOSE 8080
-CMD ["yarn", "start"]
+
+# 本番モードで起動
+CMD ["npm", "start"]
