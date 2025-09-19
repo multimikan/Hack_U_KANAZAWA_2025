@@ -16,7 +16,7 @@ export function getHeaderHeight(hasExtension: boolean): number {
 
 export default function Header({ children, className, shadow }: HeaderProps) {
   const headerClass =
-    " top-0 left-0 items-center w-full z-50 p-3 px-5" +
+    " top-0 left-0 items-center w-full z-50 p-5 px-5" +
     (shadow ? " shadow " : shadow == null ? " shadow " : " ") +
     (className ? className : " ");
   return (

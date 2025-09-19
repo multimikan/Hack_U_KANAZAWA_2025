@@ -44,8 +44,8 @@ linear-gradient(
           ) : (
             // ログインしている場合
             <div className="flex gap-4">
-              <UserButton />
               <CreateButton />
+              <UserButton />
             </div>
           )}
         </nav>

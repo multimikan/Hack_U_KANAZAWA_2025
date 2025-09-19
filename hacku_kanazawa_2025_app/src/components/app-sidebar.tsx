@@ -12,6 +12,8 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { EXTENTION_HEADER_HEIGHT } from "./header/Header";
+import { FitFrameToContentMenuItem, Tldraw } from "tldraw";
+import React from "react";
 
 const items = [
   { title: "Home", url: "#", icon: Home },
@@ -21,25 +23,13 @@ const items = [
   { title: "Settings", url: "#", icon: Settings },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({ children }: { children: React.ReactNode }) {
   return (
     <Sidebar style={{ top: EXTENTION_HEADER_HEIGHT }} variant="inset">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+          <SidebarGroupContent className="w-full h-hull">
+            {children}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

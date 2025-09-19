@@ -8,9 +8,12 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { v4 as uuidv4 } from "uuid";
 import { EditorState as TextEditorState } from "@tiptap/pm/state";
-import { Editor, useValue } from "tldraw";
-import CustomTldraw from "./components/CustomTldraw";
-import { createContext, Suspense, useEffect, useState } from "react";
+import { createTLStore, Editor, Tldraw, useValue } from "tldraw";
+import CustomTldraw, {
+  CAMERA_OPTIONS,
+  FitToContent,
+} from "./components/CustomTldraw";
+import { createContext, Suspense, useEffect, useMemo, useState } from "react";
 import PresentationButton from "./components/PresentationButton";
 import { ExternalToolbar } from "./components/ToolBar";
 import "tldraw/tldraw.css";
@@ -82,6 +85,17 @@ export function CreateParams() {
   const [_, setTextEditorState] = useState<TextEditorState | null>(
     textEditor?.state ?? null
   );
+
+  const subStore = useMemo(() => {
+    // 現在の store の snapshot を取得
+    const snapshot = store.getSnapshot();
+    // snapshot を clone して新しい store を作る
+
+    const cloned = createTLStore();
+    cloned.loadSnapshot(structuredClone(snapshot));
+    return cloned;
+  }, [store]);
+
   useEffect(() => {
     if (!session) return router.push("./");
 
@@ -89,11 +103,17 @@ export function CreateParams() {
     const originalStyle = window.getComputedStyle(document.body).overflow;
     document.body.style.overflow = "hidden";
 
+    const unsub = store.listen(() => {
+      const snapshot = store.getSnapshot();
+      subStore.loadSnapshot(structuredClone(snapshot));
+    });
+
     // ② アンマウント時に元に戻す
     return () => {
+      unsub;
       document.body.style.overflow = originalStyle;
     };
-  }, []);
+  }, [subStore]);
 
   return (
     <div className="tldraw__editor">
@@ -119,7 +139,29 @@ export function CreateParams() {
       </div>
 
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar>
+          <div
+            className="w-full"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: `calc(100vh - ${EXTENTION_HEADER_HEIGHT + 24}px)`,
+              overflow: "hidden",
+            }}
+          >
+            <Tldraw
+              onMount={(editor: Editor) => {
+                setEditor(editor);
+                editor.setCameraOptions(CAMERA_OPTIONS);
+                editor.setCamera(editor.getCamera(), { reset: false });
+              }}
+              hideUi
+              store={subStore}
+            >
+              <FitToContent />
+            </Tldraw>
+          </div>
+        </AppSidebar>
         <main
           className="w-full"
           style={{
