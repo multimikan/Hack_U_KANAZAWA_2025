@@ -50,8 +50,7 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production \
-    PORT=3000
+
 
 # ランタイム環境変数を再設定（ARGからは引き継がれないため）
 ARG GOOGLE_CLIENT_ID
