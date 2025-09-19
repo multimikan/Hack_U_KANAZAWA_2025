@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { EditorState as TextEditorState } from "@tiptap/pm/state";
 import { Editor, useValue } from "tldraw";
 import CustomTldraw from "./components/CustomTldraw";
-import { createContext, useEffect, useState } from "react";
+import { createContext, Suspense, useEffect, useState } from "react";
 import PresentationButton from "./components/PresentationButton";
 import { ExternalToolbar } from "./components/ToolBar";
 import "tldraw/tldraw.css";
@@ -96,52 +96,54 @@ export default function Create() {
   }, []);
 
   return (
-    <div className="tldraw__editor">
-      <Header shadow={false}>
-        <nav className="flex gap-2 text-sm sm:text-xs font-bold justify-items-center items-center px-4 sm:px-3 sm:w-auto">
-          <PresentationButton />
-          <SaveButton style={postStyle!} store={store} />
-          <PostButton />
-        </nav>
-      </Header>
-      <div className="pb-2 px-4 pt-2">
-        {editor && (
-          <editorContext.Provider value={{ editor }}>
-            <ExternalToolbar
+    <Suspense fallback={<div>loading...</div>}>
+      <div className="tldraw__editor">
+        <Header shadow={false}>
+          <nav className="flex gap-2 text-sm sm:text-xs font-bold justify-items-center items-center px-4 sm:px-3 sm:w-auto">
+            <PresentationButton />
+            <SaveButton style={postStyle!} store={store} />
+            <PostButton />
+          </nav>
+        </Header>
+        <div className="pb-2 px-4 pt-2">
+          {editor && (
+            <editorContext.Provider value={{ editor }}>
+              <ExternalToolbar
+                editor={editor}
+                setEditor={setEditor}
+                styles={styles}
+                textEditor={textEditor}
+                setTextEditorState={setTextEditorState}
+              />
+            </editorContext.Provider>
+          )}
+        </div>
+
+        <SidebarProvider>
+          <AppSidebar />
+          <main
+            className="w-full"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: `calc(100vh - ${EXTENTION_HEADER_HEIGHT}px)`,
+              overflow: "hidden",
+            }}
+          >
+            <CustomTldraw
+              postStyle={postStyle!}
               editor={editor}
               setEditor={setEditor}
               styles={styles}
+              setStyles={setStyles}
               textEditor={textEditor}
               setTextEditorState={setTextEditorState}
+              store={store}
+              loadingState={loadingState}
             />
-          </editorContext.Provider>
-        )}
+          </main>
+        </SidebarProvider>
       </div>
-
-      <SidebarProvider>
-        <AppSidebar />
-        <main
-          className="w-full"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            height: `calc(100vh - ${EXTENTION_HEADER_HEIGHT}px)`,
-            overflow: "hidden",
-          }}
-        >
-          <CustomTldraw
-            postStyle={postStyle!}
-            editor={editor}
-            setEditor={setEditor}
-            styles={styles}
-            setStyles={setStyles}
-            textEditor={textEditor}
-            setTextEditorState={setTextEditorState}
-            store={store}
-            loadingState={loadingState}
-          />
-        </main>
-      </SidebarProvider>
-    </div>
+    </Suspense>
   );
 }
