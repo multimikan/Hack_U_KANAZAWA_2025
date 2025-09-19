@@ -1,10 +1,9 @@
-# cloudbuild.yaml (hacku_kanazawa_2025_app 配下)
+# workspace/cloudbuild.yaml
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
         'build',
-        '-f', 'hacku_kanazawa_2025_app/Dockerfile',
         '--build-arg', 'AUTH_SECRET=$_AUTH_SECRET',
         '--build-arg', 'AUTH_URL=$_AUTH_URL',
         '--build-arg', 'GOOGLE_CLIENT_ID=$_GOOGLE_CLIENT_ID',
@@ -22,7 +21,7 @@ steps:
         '--build-arg', 'NEXT_PUBLIC_FIREBASE_APP_ID=$_NEXT_PUBLIC_FIREBASE_APP_ID',
         '--build-arg', 'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID',
         '-t', 'gcr.io/$PROJECT_ID/next-app',
-        'hacku_kanazawa_2025_app'
+        '.'  
       ]
 images:
   - 'gcr.io/$PROJECT_ID/next-app'
