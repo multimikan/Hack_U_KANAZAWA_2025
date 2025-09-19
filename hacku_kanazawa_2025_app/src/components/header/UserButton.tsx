@@ -26,41 +26,43 @@ export default function UserButton() {
         </button>
       </Popover.Trigger>
 
-      <Popover.Content
-        className="text-sm sm:text-xs font-bold bg-white border border-gray-200 rounded-md shadow-md text-gray-600 p-1"
-        sideOffset={5} // ボタンとの隙間
-        align="end" // 右寄せ
-      >
-        <div className="p-3">
-          <p className="font-bold">{session?.user?.name}</p>
-          <p className="text-sm">{session?.user?.email}</p>
-        </div>
-        <hr className="border-gray-200 my-1" />
-        <div className="">
-          <button
-            onClick={() => signOut()}
-            className="p-3 rounded-xl flex w-full items-center justify-start hover:bg-gray-100"
-          >
-            <EarthIcon className="mr-2 w-5 h-5" />
-            投稿一覧
-          </button>
-          <button
-            onClick={() => router.push("/draft")}
-            className="p-3 rounded-xl flex w-full items-center justify-start hover:bg-gray-100"
-          >
-            <Notebook className="mr-2 w-5 h-5" />
-            下書き一覧
-          </button>
+      <Popover.Portal>
+        <Popover.Content
+          className="text-sm sm:text-xs font-bold bg-white border border-gray-200 rounded-md shadow-md text-gray-600 p-1"
+          sideOffset={5} // ボタンとの隙間
+          align="end" // 右寄せ
+        >
+          <div className="p-3">
+            <p className="font-bold">{session?.user?.name}</p>
+            <p className="text-sm">{session?.user?.email}</p>
+          </div>
           <hr className="border-gray-200 my-1" />
-          <button
-            onClick={() => signOut()}
-            className="p-3 rounded-xl flex w-full items-center justify-start hover:bg-gray-100"
-          >
-            <LogOut className="mr-2 w-5 h-5" />
-            ログアウト
-          </button>
-        </div>
-      </Popover.Content>
+          <div className="">
+            <button
+              onClick={() => router.push("/post")}
+              className="p-3 rounded-xl flex w-full items-center justify-start hover:bg-gray-100"
+            >
+              <EarthIcon className="mr-2 w-5 h-5" />
+              投稿一覧
+            </button>
+            <button
+              onClick={() => router.push("/draft")}
+              className="p-3 rounded-xl flex w-full items-center justify-start hover:bg-gray-100"
+            >
+              <Notebook className="mr-2 w-5 h-5" />
+              下書き一覧
+            </button>
+            <hr className="border-gray-200 my-1" />
+            <button
+              onClick={() => signOut()}
+              className="p-3 rounded-xl flex w-full items-center justify-start hover:bg-gray-100"
+            >
+              <LogOut className="mr-2 w-5 h-5" />
+              ログアウト
+            </button>
+          </div>
+        </Popover.Content>
+      </Popover.Portal>
     </Popover.Root>
   );
 }

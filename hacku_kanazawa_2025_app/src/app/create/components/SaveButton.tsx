@@ -4,6 +4,8 @@ import { useState } from "react";
 import { addData, PostStyle } from "@/lib/firebase/firebase";
 import { TLStore, getSnapshot } from "tldraw";
 import { useRouter } from "next/navigation";
+import * as Dialog from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
 
 export default function SaveButton({
   style,
@@ -66,40 +68,59 @@ export default function SaveButton({
       </button>
 
       {/* モーダル */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-bold mb-4">
+      <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black/70 backdrop-blur-sm data-[state=open]:animate-fadeIn z-500" />
+          <Dialog.Content
+            className="fixed left-1/2 top-1/2 w-[90vw] max-w-md -translate-x-1/2 -translate-y-1/2 
+                       rounded-xl bg-white p-6 shadow-xl focus:outline-none data-[state=open]:animate-scaleIn z-600"
+          >
+            <Dialog.Title className="text-lg font-bold mb-4">
               タイトルを入力してください
-            </h2>
+            </Dialog.Title>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md mb-4"
+              className="w-full border rounded-md px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="タイトルを入力..."
               autoFocus
             />
+
             <div className="flex justify-end space-x-2">
-              <button
-                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setTitle("");
-                }}
-              >
-                キャンセル
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                onClick={handleModalSave}
-              >
-                保存
-              </button>
+              <Dialog.Close asChild>
+                <button
+                  className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setTitle("");
+                  }}
+                >
+                  キャンセル
+                </button>
+              </Dialog.Close>
+              <Dialog.Close asChild>
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  onClick={handleModalSave}
+                >
+                  保存
+                </button>
+              </Dialog.Close>
             </div>
-          </div>
-        </div>
-      )}
+
+            {/* 右上の ✕ ボタン */}
+            <Dialog.Close asChild>
+              <button
+                className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100"
+                aria-label="閉じる"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </Dialog.Close>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </>
   );
 }

@@ -1,3 +1,44 @@
+// すべての公開投稿を取得（accounts/*/posts から public: true のみ）
+import { getDocs } from 'firebase/firestore';
+
+/**
+ * 全ユーザーの公開投稿のみを取得する
+ * @param setPosts 投稿リストをセットするコールバック
+ * @returns unsubscribe関数（ダミー）
+ */
+export const loadAllPublicPosts = ({ setPosts }: { setPosts: (posts: PostDocument[]) => void }) => {
+  // accounts コレクションの全ユーザーを取得
+  getDocs(collection(db, 'accounts')).then(async (accountsSnap) => {
+    const allPosts: PostDocument[] = [];
+    for (const accountDoc of accountsSnap.docs) {
+      const email = accountDoc.id;
+      const postsRef = collection(db, 'accounts', email, 'posts');
+      const postsSnap = await getDocs(postsRef);
+      postsSnap.forEach((docSnap) => {
+        const data = docSnap.data() as PostDocument;
+        if (data.style && data.style.public) {
+          allPosts.push({
+            id: docSnap.id,
+            email,
+            style: {
+              id: data.style.id,
+              public: data.style.public,
+              title: data.style.title,
+              tldrawStore: data.style.tldrawStore,
+            },
+            createdAt: data.createdAt as Timestamp,
+            updatedAt: data.updatedAt as Timestamp,
+          });
+        }
+      });
+    }
+    // updatedAt降順でソート
+    allPosts.sort((a, b) => b.updatedAt.seconds - a.updatedAt.seconds);
+    setPosts(allPosts);
+  });
+  // ダミーのunsubscribe（リアルタイム購読でないため）
+  return () => {};
+};
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from "firebase/analytics";

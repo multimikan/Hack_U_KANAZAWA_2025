@@ -1,15 +1,23 @@
 "use client";
 
 import CreateButton from "@/components/header/CreateButton";
-import Header from "@/components/header/Header";
+import Header, { EXTENTION_HEADER_HEIGHT } from "@/components/header/Header";
 import LoginButton from "@/components/header/LoginButton";
 import LogoButton from "@/components/header/LogoButton";
 import UserButton from "@/components/header/UserButton";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { Pencil, Presentation } from "lucide-react";
 import { useSession, signOut, signIn } from "next-auth/react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import PresentationButton from "./create/components/PresentationButton";
 
 export default function Home() {
   const { data: session, status } = useSession();
+
+  useEffect(() => {
+    return;
+  }, []);
 
   return (
     <div
@@ -18,25 +26,18 @@ export default function Home() {
         inset: 0,
         zIndex: -1,
         background:
-          // 横方向ピンク（左→右）を上に重ね、縦方向フェードを下に重ねる
+          // 星空風のグラデーション（上から下に暗くなる）
           `linear-gradient(
-  90deg,
-  rgba(255,192,203,0.30) 0%,
-  rgba(255,192,203,0.15) 45%,
-  rgba(255,192,203,0.08) 70%,
-  rgba(255,192,203,0) 100%
-),
-linear-gradient(
-  180deg,
-  rgba(255,255,255,0) 10%,  /* ← さらに早く透明から開始 */
-  #ffffff 50%               /* ← 半分で白に切り替え */
-)
-
-`,
+        180deg,
+        #fffbe9 0%,
+        #e3e6f3 30%,
+        #b6b8d6 60%,
+        #23243a 100%
+        )`,
       }}
     >
       <Header className="bg-transparent" shadow={false}>
-        <nav className="flex gap-4 justify-items-center items-center px-4 sm:px-3 sm:w-auto">
+        <nav className="flex gap-4 justify-items-center items-center  sm:w-auto">
           {status === "loading" ? ( // ロード中の場合
             <div />
           ) : !session ? ( // ログインしていない場合
@@ -45,106 +46,58 @@ linear-gradient(
             // ログインしている場合
             <div className="flex gap-4">
               <UserButton />
-              <CreateButton />
             </div>
           )}
         </nav>
       </Header>
 
-      <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+      <div className="font-sans grid grid-rows-[0px_1fr_128px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
         <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-          <Image
-            className="dark:invert"
-            src="/next.svg"
-            alt="Next.js logo"
-            width={180}
-            height={38}
-            priority
-          />
-          <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-            <li className="mb-2 tracking-[-.01em]">
-              Get started by editing{" "}
-              <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-                src/app/page.tsx
-              </code>
-              .
-            </li>
-            <li className="tracking-[-.01em]">
-              Save and see your changes instantly.
-            </li>
-          </ol>
+          <div className="font-xl items-left">
+            <span className="text-6xl font-extrabold leading-tight">
+              {`一夜の挑戦を、`}
+              <br />
+              {`一生の成果物に。`}
+              <div className="p-2" />
+            </span>
+          </div>
+          <div className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
+            <div className="mb-2 tracking-[-.01em]">
+              ハッカソンにでたけど、燃え尽きてしまう...?{" "}
+              あなたの挑戦を他の人に見てもらいましょう。
+            </div>
+            <div className="mb-2 tracking-[-.01em]">
+              方法は簡単です。プレゼンテーションを作成するだけ。
+            </div>
+          </div>
 
           <div className="flex gap-4 items-center flex-col sm:flex-row">
+            <CreateButton />
             <a
-              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-              href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                className="dark:invert"
-                src="/vercel.svg"
-                alt="Vercel logomark"
-                width={20}
-                height={20}
-              />
-              Deploy now
-            </a>
-            <a
-              className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
+              className="rounded-md border border-solid border-black/[.08] dark:border-white/[.145] transition-colors text-gray-100 flex items-center justify-center bg-gray-400 hover:bg-gray-500 dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-10 px-4 sm:px-5 w-full sm:w-auto md:w-[166px]"
               href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Read our docs
+              投稿を見る
             </a>
           </div>
         </main>
-        <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+        <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-end w-full">
           <a
             className="flex items-center gap-2 hover:underline hover:underline-offset-4"
             href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
             target="_blank"
             rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/file.svg"
-              alt="File icon"
-              width={16}
-              height={16}
-            />
-            Learn
-          </a>
+          ></a>
           <a
-            className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            className="flex text-white items-center gap-2 hover:underline hover:underline-offset-4"
+            href="https://github.com/multimikan/Hack_U_KANAZAWA_2025"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Image
-              aria-hidden
-              src="/window.svg"
-              alt="Window icon"
-              width={16}
-              height={16}
-            />
-            Examples
-          </a>
-          <a
-            className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-            href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/globe.svg"
-              alt="Globe icon"
-              width={16}
-              height={16}
-            />
-            Go to nextjs.org →
+            <GitHubLogoIcon className="text-white w-8 h-8" />
+            私たちのGitHubリポジトリ
           </a>
         </footer>
       </div>

@@ -101,7 +101,7 @@ export function CreateParams() {
         <nav className="flex gap-2 text-sm sm:text-xs font-bold justify-items-center items-center px-4 sm:px-3 sm:w-auto">
           <PresentationButton />
           <SaveButton style={postStyle!} store={store} />
-          <PostButton />
+          <PostButton style={postStyle!} store={store} />
         </nav>
       </Header>
       <div className="pb-2 px-4 pt-2">

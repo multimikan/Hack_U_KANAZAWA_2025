@@ -13,9 +13,28 @@ export default function LogoButton() {
       onClick={() => {
         router.push("./");
       }}
-      className="font-sans font-bold text-base sm:text-xl tracking-tight"
+      className="flex items-center font-sans font-bold text-base sm:text-xl tracking-tight cursor-pointer"
     >
-      Hack U KANAZAWA 2025
+      <img
+        src="/hacku_l.PNG"
+        alt="Hack U Kanazawa Icon"
+        className="w-13 h-13"
+      />
+      <img
+        src="/hackukanazawaicon.gif"
+        alt="Hack U Kanazawa Icon"
+        className="w-13 h-13"
+      />
+      <img
+        src="/hacku_k.PNG"
+        alt="Hack U Kanazawa Icon"
+        className="w-13 h-13"
+      />
+      <img
+        src="/hacku_u.PNG"
+        alt="Hack U Kanazawa Icon"
+        className="w-13 h-13"
+      />
     </a>
   );
 }
