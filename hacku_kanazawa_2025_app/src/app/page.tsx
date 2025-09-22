@@ -29,10 +29,10 @@ export default function Home() {
           // 星空風のグラデーション（上から下に暗くなる）
           `linear-gradient(
         180deg,
-        #fffbe9 0%,
-        #e3e6f3 30%,
-        #b6b8d6 60%,
-        #23243a 100%
+        #ffe4bdff 0%,
+        #ecefffff 30%,
+        #c4c8ffff 60%,
+        #8ab5ffff 100%
         )`,
       }}
     >
@@ -61,11 +61,11 @@ export default function Home() {
               <div className="p-2" />
             </span>
           </div>
-          <div className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-            <div className="mb-2 tracking-[-.01em]">
-              ハッカソンにでたけど、燃え尽きてしまう...?{" "}
-              あなたの挑戦を他の人に見てもらいましょう。
-            </div>
+          <div className="font-mono font-bold list-inside list-decimal text-sm/6 text-center sm:text-left">
+            <span className="mb-2 tracking-[-.01em]">
+              ハッカソンにでたけど、燃え尽きてしまう...? <br />
+              あなたの挑戦を他の人に見てもらいましょう！
+            </span>
             <div className="mb-2 tracking-[-.01em]">
               方法は簡単です。プレゼンテーションを作成するだけ。
             </div>
@@ -75,7 +75,7 @@ export default function Home() {
             <CreateButton />
             <a
               className="rounded-md border border-solid border-black/[.08] dark:border-white/[.145] transition-colors text-gray-100 flex items-center justify-center bg-gray-400 hover:bg-gray-500 dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-10 px-4 sm:px-5 w-full sm:w-auto md:w-[166px]"
-              href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              href="/worldpost"
               target="_blank"
               rel="noopener noreferrer"
             >

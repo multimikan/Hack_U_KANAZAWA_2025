@@ -1,43 +1,54 @@
 // すべての公開投稿を取得（accounts/*/posts から public: true のみ）
-import { getDocs } from 'firebase/firestore';
+import { collectionGroup, getDocs, limit, where } from 'firebase/firestore';
 
 /**
  * 全ユーザーの公開投稿のみを取得する
  * @param setPosts 投稿リストをセットするコールバック
  * @returns unsubscribe関数（ダミー）
  */
-export const loadAllPublicPosts = ({ setPosts }: { setPosts: (posts: PostDocument[]) => void }) => {
-  // accounts コレクションの全ユーザーを取得
-  getDocs(collection(db, 'accounts')).then(async (accountsSnap) => {
-    const allPosts: PostDocument[] = [];
-    for (const accountDoc of accountsSnap.docs) {
-      const email = accountDoc.id;
-      const postsRef = collection(db, 'accounts', email, 'posts');
-      const postsSnap = await getDocs(postsRef);
-      postsSnap.forEach((docSnap) => {
-        const data = docSnap.data() as PostDocument;
-        if (data.style && data.style.public) {
-          allPosts.push({
-            id: docSnap.id,
-            email,
-            style: {
-              id: data.style.id,
-              public: data.style.public,
-              title: data.style.title,
-              tldrawStore: data.style.tldrawStore,
-            },
-            createdAt: data.createdAt as Timestamp,
-            updatedAt: data.updatedAt as Timestamp,
-          });
-        }
-      });
-    }
-    // updatedAt降順でソート
-    allPosts.sort((a, b) => b.updatedAt.seconds - a.updatedAt.seconds);
-    setPosts(allPosts);
-  });
-  // ダミーのunsubscribe（リアルタイム購読でないため）
-  return () => {};
+export const loadAllPublicPosts = async ({
+  setPosts,
+}: {
+  setPosts: (posts: PostDocument[]) => void;
+}):Promise<void> => {
+  console.log("[loadRandomPublicPosts] start");
+
+  try {
+    // accounts/*/posts を横断して public=true のものを取得
+    const q = query(
+      collectionGroup(db, "posts"),
+      where("style.public", "==", true),
+      limit(50) // まず多めに取る（例: 50件）
+    );
+
+    const snap = await getDocs(q);
+    console.log("[loadRandomPublicPosts] total found:", snap.size);
+
+    const allPosts: PostDocument[] = snap.docs.map((doc) => {
+      const data = doc.data() as PostDocument;
+      return {
+        id: doc.id,
+        email: doc.ref.parent.parent?.id ?? "unknown", // 親の userId を取得
+        style: {
+          id: data.style.id,
+          public: data.style.public,
+          title: data.style.title,
+          tldrawStore: data.style.tldrawStore,
+        },
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      };
+    });
+
+    // ランダムに10件選ぶ
+    const shuffled = allPosts.sort(() => Math.random() - 0.5).slice(0, 10);
+
+    console.log("[loadRandomPublicPosts] shuffled:", shuffled.map((p) => p.style.title));
+
+    setPosts(shuffled);
+  } catch (error) {
+    console.error("[loadRandomPublicPosts] error:", error);
+  }
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { initializeApp } from 'firebase/app';
@@ -142,7 +153,6 @@ export const loadData = ({
   return unsubscribe
 }
 
-
 export async function fetchPostById(params: {
   email: string;
   postId: string;
@@ -150,18 +160,16 @@ export async function fetchPostById(params: {
   const { email, postId } = params;
   const docRef = doc(db, "accounts", email, "posts", postId);
   const snap = await getDoc(docRef);
+  if (!snap.exists()) return null;
 
-  if (!snap.exists()) {
-    return null;
-  }
+  const raw = snap.data() as { style?: any };
+  if (!raw.style) return null;
 
-  // Firestore ドキュメントのフィールドを PostStyle 型にマッピング
-  const data = snap.data() as Omit<PostStyle, "id">;
   const style: PostStyle = {
-    id: snap.id,
-    public: data.public,
-    title: data.title,
-    tldrawStore: data.tldrawStore,
-  }
+    id: snap.id, // または raw.style.id を優先しても可
+    public: raw.style.public,
+    title: raw.style.title,
+    tldrawStore: raw.style.tldrawStore,
+  };
   return style;
 }

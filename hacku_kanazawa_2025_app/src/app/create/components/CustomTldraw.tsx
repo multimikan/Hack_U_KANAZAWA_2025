@@ -8,6 +8,9 @@ import {
   ReadonlySharedStyleMap,
   TLCameraOptions,
   Tldraw,
+  TLUiActionsContextType,
+  TLUiOverrides,
+  TLUiToolsContextType,
   track,
   useEditor,
   useRelevantStyles,
@@ -44,6 +47,24 @@ const FitToContent = track(() => {
 
   return null;
 });
+
+const overrides: TLUiOverrides = {
+  //[a]
+  actions(_editor, actions): TLUiActionsContextType {
+    const newActions = {
+      ...actions,
+      "toggle-grid": { ...actions["toggle-grid"], kbd: "x" },
+      "copy-as-png": { ...actions["copy-as-png"], kbd: "cmd+1,ctrl+1" },
+    };
+
+    return newActions;
+  },
+  //[b]
+  tools(_editor, tools): TLUiToolsContextType {
+    const newTools = { ...tools, draw: { ...tools.draw, kbd: "p" } };
+    return newTools;
+  },
+};
 
 export default function CustomTldraw({
   postStyle,

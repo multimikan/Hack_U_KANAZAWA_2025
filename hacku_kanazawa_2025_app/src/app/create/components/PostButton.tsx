@@ -35,7 +35,7 @@ export default function PostButton({
 
     await addData({ style: updatedStyle });
     setTitle("");
-    router.push("./draft"); // 公開後の遷移先
+    router.push("./post"); // 公開後の遷移先
   };
 
   return (
